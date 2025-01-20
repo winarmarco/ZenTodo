@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: web
+    build:
+      context: "."
+      dockerfile: Dockerfile
+    image: "nextjs-app"
+    environment:
+      - "NODE_ENV=dev"
+      - "PORT=3000"
+    ports:
+      - "8080:3000"
+  
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+    
