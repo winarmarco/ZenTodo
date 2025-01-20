@@ -1,7 +1,8 @@
+import { Todo } from "@prisma/client";
 import { create } from "zustand";
 
 type State = {
-  todoId: number | null;
+  todoId: Todo["id"] | null;
 };
 
 type Action = {

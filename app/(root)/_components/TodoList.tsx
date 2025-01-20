@@ -4,7 +4,9 @@ import TodoCard from "./TodoCard";
 import { useEdit } from "@/hooks/useEdit";
 import { cn } from "@/lib/utils";
 
-const TodoList = () => {
+import type { Todo } from "@prisma/client";
+
+const TodoList = ({ todos }: { todos: Todo[] }) => {
   const { todoId, setTodoId } = useEdit();
 
   return (
@@ -19,12 +21,8 @@ const TodoList = () => {
         }}
       ></div>
 
-      {[5, 6, 7, 8].map((value, index) => (
-        <TodoCard
-          key={`key-${index}`}
-          id={value}
-          isEditting={todoId === value}
-        />
+      {todos.map((todo) => (
+        <TodoCard key={todo.id} todo={todo} isEditting={todoId === todo.id} />
       ))}
     </>
   );
