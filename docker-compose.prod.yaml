@@ -9,13 +9,13 @@ services:
       - "30"
       - "--rolling-restart"
     volumes:
-      - /var/run/docker.dock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
 
   traefik:
     image: traefik:v2.10
     container_name: traefik
     command:
-      - "--api.insecure=true"
+      # - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
@@ -48,7 +48,7 @@ services:
       - "traefik.http.routers.web.tls=true"
       - "traefik.http.routers.web.tls.certresolver=myresolver"
       - "com.centurylinklabs.watchtower.enable=true"
-      # - "traefik.http.services.web.loadbalancer.server.port=3000"
+      - "traefik.http.services.web.loadbalancer.server.port=3000"
     depends_on:
       - db
     env_file:
@@ -62,12 +62,18 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
       MYSQL_DATABASE: ZenTodo
+    secret:
+      - db_root_password
     ports:
       - "3306:3306"
     volumes:
       - mysql-volume:/var/lib/mysql
+
+secrets:
+  db_root_password:
+    file: db_root_password.txt
 
 volumes:
   mysql-volume:
