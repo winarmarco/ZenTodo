@@ -1,21 +1,34 @@
 version: "3.8"
 
 services:
+  watchtower:
+    image: containrrr/watchtower
+    command:
+      - "--label-enable"
+      - "--interval"
+      - "30"
+      - "--rolling-restart"
+    volumes:
+      - /var/run/docker.dock:/var/run/docker.sock
+
   traefik:
     image: traefik:v2.10
     container_name: traefik
     command:
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+      - "--api.insecure=true"
       - "--providers.docker=true"
+      - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=marcowinar@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
       - "./letsencrypt:/letsencrypt"
     restart: always
       
@@ -35,12 +48,16 @@ services:
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls=true"
       - "traefik.http.routers.web.tls.certresolver=myresolver"
-      - "traefik.http.services.web.loadbalancer.server.port=3000"
+      - "com.centurylinklabs.watchtower.enable=true"
+      # - "traefik.http.services.web.loadbalancer.server.port=3000"
     depends_on:
       - db
     env_file:
       - .env
     restart: always
+    deploy:
+      mode: replicated
+      replicas: 3
 
   db:
     image: mysql:latest
@@ -56,3 +73,4 @@ services:
 volumes:
   mysql-volume:
     driver: local
+  letsencrypt:
