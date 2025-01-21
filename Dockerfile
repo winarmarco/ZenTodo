@@ -51,8 +51,5 @@ COPY prisma ./prisma/
 USER nextjs
 
 ENV PORT 3000
-ENV HOSTNAME localhost
 
-RUN npx prisma migrate deploy
-
-CMD node server.js
+CMD npx prisma migrate deploy & node server.js
