@@ -46,7 +46,7 @@ export default async function Home({
 
   return (
     <div className="flex flex-col max-w-7xl mx-auto px-4 mt-10">
-      <h1 className="text-3xl font-bold mb-10">My TodoZen</h1>
+      <h1 className="text-3xl font-bold mb-10">My Todo</h1>
 
       <SearchBar query={query || ""} />
 
