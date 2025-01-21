@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Convert repository name to lowercase
+      # Convert repository name to lowercase and set as environment variable
       - name: Set image name
         run: echo "IMAGE_NAME=ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
 
@@ -28,6 +28,8 @@ jobs:
 
       # Build and push Docker image
       - name: Build and push Docker image
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
           docker build -t $IMAGE_NAME:prod .
           docker push $IMAGE_NAME:prod
