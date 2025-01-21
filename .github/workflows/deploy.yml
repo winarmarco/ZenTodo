@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main # Trigger the workflow on pushes to the main branch
+      - main  # Trigger the workflow on pushes to the main branch
 
 jobs:
   build-and-push:
@@ -14,9 +14,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Convert repository name to lowercase and set as environment variable
+      # Convert repository name to lowercase and set as IMAGE_NAME
       - name: Set image name
-        run: echo "IMAGE_NAME=ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+        run: |
+          IMAGE_NAME="ghcr.io/${{ github.repository }}"  # Assign the full repo name
+          IMAGE_NAME_LOWER=$(echo $IMAGE_NAME | tr '[:upper:]' '[:lower:]')  # Convert to lowercase
+          echo "IMAGE_NAME=$IMAGE_NAME_LOWER" >> $GITHUB_ENV  # Save to GITHUB_ENV for next steps
 
       # Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
@@ -31,5 +34,6 @@ jobs:
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
+          echo "Using image name: $IMAGE_NAME"  # Debugging line
           docker build -t $IMAGE_NAME:prod .
           docker push $IMAGE_NAME:prod
