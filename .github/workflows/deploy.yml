@@ -9,19 +9,14 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    env:
-      IMAGE_NAME: ghcr.io/${{ github.repository }}/zentodo-web # GitHub Container Registry image name
-
     steps:
       # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      # Convert repository name to lowercase
+      - name: Set image name
+        run: echo "IMAGE_NAME=ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
 
       # Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
