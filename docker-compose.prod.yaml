@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
       args:
         NODE_ENV: production
-    image: "nextjs-app"
+    image: winarmarco/zentodo-web:prod
     environment:
       NODE_ENV: production
     labels:
