@@ -33,7 +33,6 @@ services:
     restart: always
       
   web:
-    container_name: web
     build:
       context: "."
       dockerfile: Dockerfile
