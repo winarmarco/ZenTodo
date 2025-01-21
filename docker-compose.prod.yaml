@@ -33,12 +33,7 @@ services:
     restart: always
       
   web:
-    build:
-      context: "."
-      dockerfile: Dockerfile
-      args:
-        NODE_ENV: production
-    image: winarmarco/zentodo-web:prod
+    image: ghcr.io/winarmarco/zentodo:prod
     environment:
       NODE_ENV: production
     labels:
@@ -62,9 +57,9 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: ZenTodo
-    secret:
+    secrets:
       - db_root_password
     ports:
       - "3306:3306"
