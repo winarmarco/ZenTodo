@@ -10,6 +10,7 @@ import { Check } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { omit } from "lodash";
 
 import {
   Form,
@@ -75,13 +76,14 @@ export const EditTodoForm = ({ todo }: { todo: Todo }) => {
                   control={form.control}
                   name="description"
                   render={({ field }) => {
-                    const { ref, ...remainingField } = field;
+                    const remainingField = omit(field, "ref");
+
                     return (
                       <FormItem>
                         <FormControl>
                           <Textarea
                             rows={5}
-                            className="text-base md:text-base w-full resize-y overflow-hidden min-h-9 h-9"
+                            className="text-base md:text-base w-full"
                             onInput={(e) => {
                               const target = e.target as HTMLTextAreaElement;
                               target.style.height = "0px";
