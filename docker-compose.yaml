@@ -25,4 +25,4 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: ZenTodo
     ports:
-      - "8888:3306"
+      - "3306:3306"
