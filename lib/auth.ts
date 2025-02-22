@@ -5,7 +5,11 @@ import Auth0 from "next-auth/providers/auth0";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  providers: [Auth0],
+  providers: [
+    Auth0({
+      allowDangerousEmailAccountLinking: true,
+    }),
+  ],
   session: { strategy: "jwt" },
   callbacks: {
     // async jwt({ token, user, account, profile }) {
