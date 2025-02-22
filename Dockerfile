@@ -52,4 +52,4 @@ USER nextjs
 
 ENV PORT 3000
 
-CMD npx prisma migrate deploy & npx prisma generate & npx prisma db push & node server.js
+CMD npx prisma migrate deploy & node server.js
